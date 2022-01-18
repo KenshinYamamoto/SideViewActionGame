@@ -15,7 +15,6 @@ public class EnemyManager : MonoBehaviour
 
     Rigidbody2D rigidbody2D;
     [SerializeField] LayerMask blockLayer;
-    [SerializeField] GameObject deathEffect;
     float speed;
 
     private void Start()
@@ -36,8 +35,8 @@ public class EnemyManager : MonoBehaviour
 
     bool isGround()
     {
-        Vector3 startPosition = transform.position + transform.right * 0.5f * transform.localScale.x;
-        Vector3 endPosition = startPosition - transform.up * 0.5f;
+        Vector3 startPosition = transform.position + transform.right * 0.55f * transform.localScale.x;
+        Vector3 endPosition = startPosition - transform.up * 0.7f;
         Debug.DrawLine(startPosition, endPosition);
         return Physics2D.Linecast(startPosition,endPosition,blockLayer);
     }
@@ -63,11 +62,11 @@ public class EnemyManager : MonoBehaviour
                 speed = 0f;
                 break;
             case DIRECTION_TYPE.RIGHT:
-                speed = 3f;
+                speed = ParamsSO.Entity.enemySpeed;
                 transform.localScale = new Vector3(1, 1, 1);
                 break;
             case DIRECTION_TYPE.LEFT:
-                speed = -3f;
+                speed = -ParamsSO.Entity.enemySpeed;
                 transform.localScale = new Vector3(-1, 1, 1);
                 break;
         }
@@ -76,7 +75,7 @@ public class EnemyManager : MonoBehaviour
 
     public void DestroyEnemy()
     {
-        Instantiate(deathEffect,transform.position,transform.rotation);
+        EffectObserver.effectObserver.GenerateEffect(transform, EffectObserver.Effect.EnemyDown);
         Destroy(gameObject);
     }
 

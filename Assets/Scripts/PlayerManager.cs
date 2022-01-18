@@ -18,7 +18,6 @@ public class PlayerManager : MonoBehaviour
     Rigidbody2D rigidbody2D;
     Animator animator;
     float speed;
-    float jumpPower = 400f;
 
     private void Start()
     {
@@ -57,7 +56,7 @@ public class PlayerManager : MonoBehaviour
             animator.SetBool("isJumping", false);
             if (Input.GetKeyDown("space"))
             {
-                Jump();
+                rigidbody2D.AddForce(Vector2.up * ParamsSO.Entity.playerJumpPower);
             }
         }
         else
@@ -79,21 +78,21 @@ public class PlayerManager : MonoBehaviour
                 speed = 0f;
                 break;
             case DIRECTION_TYPE.RIGHT:
-                speed = 3f;
+                speed = ParamsSO.Entity.playerSpeed;
                 transform.localScale = new Vector3(1, 1, 1);
                 break;
             case DIRECTION_TYPE.LEFT:
-                speed = -3f;
+                speed = -ParamsSO.Entity.playerSpeed;
                 transform.localScale = new Vector3(-1, 1, 1);
                 break;
         }
         rigidbody2D.velocity = new Vector2(speed,rigidbody2D.velocity.y);
     }
 
-    void Jump()
+    void PlayJumpSound()
     {
         // è„ï˚å¸Ç…óÕÇâ¡Ç¶ÇÈ
-        rigidbody2D.AddForce(Vector2.up * jumpPower);
+        rigidbody2D.AddForce(Vector2.up * ParamsSO.Entity.playerJumpPower);
         SoundObserver.soundObserver.PlaySE(SoundObserver.SE.Jump);
     }
 
@@ -136,9 +135,10 @@ public class PlayerManager : MonoBehaviour
             {
                 // è„Ç©ÇÁì•ÇÒÇæÇÁ
                 // ÉWÉÉÉìÉvÇ∑ÇÈ
-                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
-                Jump();
+                GameObserver.gameObserver.AddScore(ParamsSO.Entity.enemyDownPoint);
                 SoundObserver.soundObserver.PlaySE(SoundObserver.SE.EnemyDown);
+                rigidbody2D.velocity = new Vector2(rigidbody2D.velocity.x, 0);
+                rigidbody2D.AddForce(Vector2.up * ParamsSO.Entity.playerEnemyDownJumpPower);
                 // ìGÇçÌèú
                 enemy.DestroyEnemy();
             }
@@ -152,12 +152,12 @@ public class PlayerManager : MonoBehaviour
 
     void PlayerDeath()
     {
-        rigidbody2D.velocity = new Vector2(0, 0);
-        rigidbody2D.AddForce(Vector2.up * jumpPower);
-        animator.SetBool("isJumping", false);
-        animator.Play("PlayerDeathAnimation");
         BoxCollider2D boxCollider2D = GetComponent<BoxCollider2D>();
         Destroy(boxCollider2D);
         GameObserver.gameObserver.GameOver();
+        rigidbody2D.velocity = new Vector2(0, 0);
+        rigidbody2D.AddForce(Vector2.up * ParamsSO.Entity.playerDeadJumpPower);
+        animator.SetBool("isJumping", false);
+        animator.Play("PlayerDeathAnimation");
     }
 }

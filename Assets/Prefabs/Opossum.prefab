@@ -119,9 +119,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.16}
+  m_Offset: {x: 0.10023975, y: -0.19007191}
   serializedVersion: 2
-  m_Radius: 0.23
+  m_Radius: 0.216331
 --- !u!50 &5915225930665551128
 Rigidbody2D:
   serializedVersion: 4
@@ -158,7 +158,6 @@ MonoBehaviour:
   blockLayer:
     serializedVersion: 2
     m_Bits: 64
-  deathEffect: {fileID: 4689488099732785331, guid: 42784aeab8ece2f4fa8abed51919f2e3, type: 3}
 --- !u!61 &6007612826820676338
 BoxCollider2D:
   m_ObjectHideFlags: 0
